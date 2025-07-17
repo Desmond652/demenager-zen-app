@@ -1,85 +1,86 @@
-# demenager-zen-app
-Application web “Déménager Zen Europe”
-{
-  "name": "demenager-zen-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  }
-}
 import { useState } from "react";
-function App() {
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+
+export default function DemenagerZenApp() {
   const [step, setStep] = useState(0);
   const [city, setCity] = useState("");
-  const [moveDate, setMoveDate] = useState("");
-  const checklist = [
+  const [moveDate, setMoveDate] = useState(null);
+  const [checklist, setChecklist] = useState([
     "Prendre date du déménagement",
     "Informer le propriétaire / syndic",
     "Résilier internet et énergie",
-    "Trier / jeter / donner"
-  ];
+    "Trier / jeter / donner",
+  ]);
+
   return (
-    <div style={{ maxWidth: '600px', margin: '40px auto', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Déménager Zen Europe</h1>
-      {step === 0 && (
-        <>
-          <p>Où vas-tu déménager ?</p>
-          <input value={city} onChange={e => setCity(e.target.value)} placeholder="Ex: Bruxelles" />
-          <p>Date de déménagement :</p>
-          <input type="date" value={moveDate} onChange={e => setMoveDate(e.target.value)} />
-          <button onClick={() => setStep(1)}>Générer mon plan</button>
-        </>
-      )}
-      {step === 1 && (
-        <>
-          <h2>Checklist pour {city} le {moveDate}</h2>
-          <ul>
-            {checklist.map((it, i) => <li key={i}>{it}</li>)}
-          </ul>
-          <button onClick={() => setStep(2)}>Voir les modèles de courriers</button>
-        </>
-      )}
-      {step === 2 && (
-        <>
-          <h2>Modèles utiles</h2>
-          <ul>
-            <li>Lettre de résiliation de bail</li>
-            <li>Lettre de changement d'adresse</li>
-            <li>Email de notification employeur/école</li>
-          </ul>
-          <button onClick={() => setStep(3)}>Voir le budget & bonus</button>
-        </>
-      )}
-      {step === 3 && (
-        <>
-          <h2>Plan de budget & bonus</h2>
-          <ul>
-            <li>Liste des dépenses à prévoir</li>
-            <li>Conseils pour économiser</li>
-            <li>5 erreurs à éviter</li>
-            <li>Script WhatsApp prêt</li>
-          </ul>
-          <button onClick={() => setStep(0)}>Recommencer</button>
-        </>
-      )}
+    <div className="p-4 max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Déménager Zen Europe</h1>
+      <Card className="mb-4">
+        <CardContent>
+          {step === 0 && (
+            <div className="space-y-4">
+              <p className="text-lg">Où vas-tu déménager ?</p>
+              <Input
+                placeholder="Exemple : Bruxelles"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              <p className="text-lg">Date de déménagement :</p>
+              <Calendar mode="single" selected={moveDate} onSelect={setMoveDate} />
+              <Button onClick={() => setStep(1)}>Générer mon plan</Button>
+            </div>
+          )}
+
+          {step === 1 && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">
+                Checklist personnalisée pour ton déménagement à {city} le {moveDate?.toLocaleDateString()}
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                {checklist.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+              <Button className="mt-4" onClick={() => setStep(2)}>
+                Voir les modèles d'emails et courriers
+              </Button>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Modèles utiles :</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Lettre de résiliation de bail</li>
+                <li>Lettre de changement d'adresse</li>
+                <li>Emails pour prévenir ton employeur, ton école...</li>
+              </ul>
+              <Button className="mt-4" onClick={() => setStep(3)}>
+                Voir le plan de budget & les bonus
+              </Button>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Plan de budget & bonus :</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Liste de dépenses à prévoir</li>
+                <li>Conseils pour économiser sur le transport</li>
+                <li>5 erreurs à éviter qui coûtent cher</li>
+                <li>Script WhatsApp prêt à copier</li>
+              </ul>
+              <Button className="mt-4" onClick={() => setStep(0)}>
+                Recommencer
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
-export default App;
 
-demenager-zen-app/
-  ├── package.json
-  ├── public/
-  │    └── index.html
-  └── src/
-       ├── App.js
-       └── index.js
